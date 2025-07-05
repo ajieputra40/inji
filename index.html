@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Inji Coffee</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Bebas Neue', Arial, sans-serif;
+            /* Updated font */
+            scroll-behavior: smooth;
+            color: white;
+        }
+
+        body {
+            background-color: black;
+        }
+
+        /* Fixed Background Video (Parallax) */
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: grayscale(100%) contrast(50%);
+        }
+
+        /* Fixed Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: transparent;
+            /* Updated background color */
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        header a:hover {
+            color: #21466b;
+        }
+
+        .header-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+            width: 500px;
+            flex-wrap: wrap;
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            font-size: 2em;
+            backdrop-filter: blur(3px);
+            /* Slight blur for readability */
+        }
+
+        #home .tin-can {
+            width: 500px;
+            height: 500px;
+            background: url('assets/inji-tin.png') no-repeat center/contain;
+        }
+
+        @keyframes rotateTinCan {
+            from {
+                transform: rotateY(0deg);
+            }
+
+            to {
+                transform: rotateY(360deg);
+            }
+        }
+
+        #about,
+        #product,
+        #contact {
+            /* background-color: rgba(255, 255, 255, 0.1); */
+        }
+
+        #product {
+            background-color: rgba(255, 255, 255, 0.5);
+            background-image: url(assets/bg-1-menu.png);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+
+        @media (max-width: 768px) {
+            #home .tin-can {
+                width: 300px;
+                height: 300px;
+                background: url('assets/inji-tin.png') no-repeat center/contain;
+            }
+        }
+
+        .carousel {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            margin: 30px auto;
+            overflow: hidden;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-track img {
+            width: 100%;
+            flex-shrink: 0;
+            border-radius: 20px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(33, 70, 107, 0.8);
+            border: none;
+            color: white;
+            font-size: 2em;
+            padding: 10px;
+            cursor: pointer;
+            user-select: none;
+            z-index: 5;
+        }
+
+        .carousel-btn.prev {
+            left: 10px;
+        }
+
+        .carousel-btn.next {
+            right: 10px;
+        }
+
+        .carousel-btn:hover {
+            background: #21466b;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-btn {
+                font-size: 1.5em;
+                padding: 8px;
+            }
+        }
+
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            /* black with 80% opacity */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            /* above everything */
+        }
+
+        #loader img {
+            width: 100px;
+            height: 100px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .testimonial-grid {
+            display: fle;
+            flex-direction: column;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 50%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .testimonial-grid img {
+            width: 100%;
+            border-radius: 10px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            cursor: pointer;
+        }
+
+        .testimonial-grid img:hover {
+            transform: scale(1.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+
+        .whatsapp-button img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .whatsapp-button img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loader">
+        <img src="assets/logo-header.png" alt="Loading Logo">
+    </div>
+
+    <!-- Background Video (Parallax Effect) -->
+    <video class="bg-video" autoplay muted loop playsinline>
+        <source src="assets/events-video-compressed.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <img src="assets/logo-header.png" width="50" height="50" alt="Pump Black">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <!-- <a href="#customize">Customize Can</a> -->
+            <!-- <a href="#events">Events</a> -->
+            <!-- <a href="#testimonial">Testimonial</a> -->
+            <a href="#product">Product</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </header>
+
+    <!-- Sections -->
+    <section id="home">
+        <div>
+            <div class="tin-can"></div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div>
+            <img src="assets/people-1-flower.png" width="400" alt="Pump Black">
+            <p>Your 1st Customized Cans<br>
+                Coffee • Space • Eatery • Cafe Block Core<br>
+                Mon - Sun, 07.00 am - 22.00 pm<br>
+            </p>
+        </div>
+    </section>
+
+    <section id="customize">
+        <div>
+            <h2>‼️ YOUR FIRST CUSTOMIZED CAN ‼️</h2>
+            <p style="font-size: 24px;">
+                Up close & personal,<br>
+                With minimal only 25 cans, you can spend<br>
+                your celebration more festive & special 💓<br><br>
+
+                For information & order contact whatsapp +62 856 1112171<br><br>
+
+                Because,<br>
+                Your can, Your way<br>
+                Your first customized can<br>
+
+                #INJI</p>
+
+            <div class="carousel">
+                <div class="carousel-track">
+                    <img src="assets/custom1.png" alt="Custom Can 1">
+                    <img src="assets/custom2.png" alt="Custom Can 2">
+                    <img src="assets/custom3.png" alt="Custom Can 3">
+                    <img src="assets/custom4.png" alt="Custom Can 4">
+                    <img src="assets/custom5.png" alt="Custom Can 5">
+                    <img src="assets/custom6.png" alt="Custom Can 6">
+                    <img src="assets/custom7.png" alt="Custom Can 7">
+                </div>
+                <button class="carousel-btn prev">&#10094;</button>
+                <button class="carousel-btn next">&#10095;</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="events">
+        <div>
+            <h2>Events & Pop-Ups</h2>
+            <video id="events-video" muted playsinline
+                style="width: 90%; max-width: 500px; margin-top: 20px;border-radius: 20px;">
+                <source src="assets/events-video-compressed.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </section>
+
+    <section id="testimonial">
+        <div>
+            <h2>Gallery & Testimonials</h2>
+            <div class="testimonial-grid">
+                <img src="assets/testimonial/testimonial 1.png" alt="Testimonial 1">
+                <img src="assets/testimonial/testimonial 2.png" alt="Testimonial 2">
+                <img src="assets/testimonial/testimonial 3.png" alt="Testimonial 3">
+                <img src="assets/testimonial/testimonial 4.png" alt="Testimonial 4">
+                <img src="assets/testimonial/testimonial 5.png" alt="Testimonial 5">
+                <img src="assets/testimonial/testimonial 6.png" alt="Testimonial 6">
+            </div>
+        </div>
+    </section>
+
+    <section id="product">
+        <div>
+            <!-- <h2>Our Products</h2>
+        <p>Discover our unique tin can coffee collection, perfect for every journey.</p> -->
+        </div>
+    </section>
+
+    <section id="contact">
+        <div>
+            <h2>Contact Us</h2>
+            <p>Email: hello@injicoffee.com | Phone: +123456789</p>
+
+            <form id="inji-form" style="margin-top: 20px; font-family: 'Bebas Neue', Arial, sans-serif;">
+                <label for="name">Name:</label><br>
+                <input type="text" id="name" name="name" required
+                    style="width: 80%; padding: 10px; margin: 10px 0;"><br>
+
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" required
+                    style="width: 80%; padding: 10px; margin: 10px 0;"><br>
+
+                <label for="details">Custom Can Details:</label><br>
+                <textarea id="details" name="details" rows="4" required
+                    style="width: 80%; padding: 10px; margin: 10px 0;"></textarea><br>
+
+                <button type="submit"
+                    style="padding: 10px 20px; background-color: #21466b; color: white; border: none; cursor: pointer;">Submit
+                    Order</button>
+            </form>
+        </div>
+    </section>
+
+    <a href="https://api.whatsapp.com/message/RVECGBUZWCCYP1" target="_blank" class="whatsapp-button">
+        <img src="assets/whatsapp-icon.png" alt="Chat on WhatsApp">
+    </a>
+
+
+    <script>
+        const track = document.querySelector('.carousel-track');
+        const slides = Array.from(track.children);
+        const prevBtn = document.querySelector('.carousel-btn.prev');
+        const nextBtn = document.querySelector('.carousel-btn.next');
+        let currentSlide = 0;
+
+        function updateCarousel() {
+            const slideWidth = slides[0].getBoundingClientRect().width;
+            track.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide === 0) ? slides.length - 1 : currentSlide - 1;
+            updateCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide === slides.length - 1) ? 0 : currentSlide + 1;
+            updateCarousel();
+        });
+
+        window.addEventListener('resize', updateCarousel);
+        updateCarousel();
+    </script>
+    <script>
+        const video = document.getElementById('events-video');
+
+        if ('IntersectionObserver' in window && video) {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
+                });
+            }, { threshold: 0.5 }); // 50% of the video should be visible
+
+            observer.observe(video);
+        }
+    </script>
+    <script>
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            loader.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => loader.style.display = 'none', 500);
+        });
+    </script>
+
+    <script>
+        document.getElementById('inji-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const name = form.name.value.trim();
+            const email = form.email.value.trim();
+            const details = form.details.value.trim();
+
+            const data = {
+                name: name,
+                email: email,
+                details: details,
+                form_name: 'Inji Coffee Order'
+            };
+
+            // Show the existing loader when submitting the form
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '1';
+            loader.style.display = 'flex';
+
+            fetch('https://script.google.com/macros/s/AKfycbwgoHoufRQlYfu6FP0Pmje6CPKT3sBVZmrjANIUVG-BTzohla9ccvOjOhQz5fTBtV4Odg/exec', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(data)
+            })
+                .then(() => {
+                    alert('Thank you! Your order has been submitted. Minji from our team will contact you shortly to confirm your custom can order.');
+                    form.reset();
+                })
+                .catch((error) => {
+                    alert('Oops! There was an error. Please try again later.');
+                    console.error(error);
+                })
+                .finally(() => {
+                    // Hide the loader after the request completes
+                    loader.style.opacity = '0';
+                    loader.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => loader.style.display = 'none', 500);
+                });
+        });
+    </script>
+
+
+
+</body>
+
+</html>
